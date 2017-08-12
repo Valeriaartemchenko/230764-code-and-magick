@@ -174,7 +174,14 @@
 </template>
 
 <script>
-  var fireballSize = 100;
+  var fireballSize = 22;
+  var gerFireballSpeed = function(left){
+    if(left) {
+      return 5;
+    } else {
+      return 2;
+    }
+  };
 </script>
 <script src="./js/game.js"></script>
 
