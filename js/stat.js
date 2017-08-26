@@ -32,14 +32,15 @@ var getPlayerColour = function (name) {
   return name === SELF_NAME ? HISTOGRAM_COLUMN_COLOR_SELF : HISTOGRAM_COLUMN_COLOR + Math.random() + ')';
 };
 
-var maxTime = -1;
-
 var getMaxTime = function (times) {
+  var maxTime = -1;
+
   for (var i = 0; i < times.length; i++) {
     if (maxTime < times[i]) {
       maxTime = times[i];
     }
   }
+  return maxTime;
 };
 
 window.renderStatistics = function (ctx, names, times) {
@@ -66,7 +67,7 @@ var drawText = function (ctx) {
 };
 
 var drawHistogram = function (ctx, names, times) {
-  getMaxTime(times);
+  var maxTime = getMaxTime(times);
   for (var i = 0; i < times.length; i++) {
     var histogramColumnX = HISTOGRAM_MARGIN_LEFT + (HISTOGRAM_COLUMN_MARGIN + HISTOGRAM_COLUMN_WIDTH) * (i + 1);
     var histogramColumnY = FIELD_HEIGHT - HISTOGRAM_COLUMN_HEIGHT;
