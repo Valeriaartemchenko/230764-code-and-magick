@@ -32,15 +32,15 @@ var getPlayerColour = function (name) {
   return name === SELF_NAME ? HISTOGRAM_COLUMN_COLOR_SELF : HISTOGRAM_COLUMN_COLOR + Math.random() + ')';
 };
 
-var getMaxTime = function (times) {
-  var maxTime = getMaxTime(times);
-  for (var i = 0; i < times.length; i++) {
-    maxTime = Math.max(maxTime, times[i]);
-  }
-  return maxTime;
-};
+var maxTime = -1;
 
-var step = HISTOGRAM_COLUMN_HEIGHT / getMaxTime;
+var getMaxTime = function (times) {
+  for (var i = 0; i < times.length; i++) {
+    if (maxTime < times[i]) {
+      maxTime = times[i];
+    }
+  }
+};
 
 window.renderStatistics = function (ctx, names, times) {
   drawCloud(ctx);
@@ -66,16 +66,15 @@ var drawText = function (ctx) {
 };
 
 var drawHistogram = function (ctx, names, times) {
+  getMaxTime(times);
   for (var i = 0; i < times.length; i++) {
-    var columnHeight = times[i] * step;
     var histogramColumnX = HISTOGRAM_MARGIN_LEFT + (HISTOGRAM_COLUMN_MARGIN + HISTOGRAM_COLUMN_WIDTH) * (i + 1);
     var histogramColumnY = FIELD_HEIGHT - HISTOGRAM_COLUMN_HEIGHT;
+    var height = HISTOGRAM_COLUMN_HEIGHT * (times[i] / maxTime);
     ctx.fillStyle = getPlayerColour(names[i]);
-    ctx.fillRect(histogramColumnX, histogramColumnY, HISTOGRAM_COLUMN_WIDTH, HISTOGRAM_COLUMN_HEIGHT);
+    ctx.fillRect(histogramColumnX, FIELD_HEIGHT - height, HISTOGRAM_COLUMN_WIDTH, height);
     ctx.fillStyle = CLOUD_TEXT_COLOR;
     ctx.fillText(Math.floor(times[i]), histogramColumnX, histogramColumnY - HISTOGRAM_TEXT_INTERVAL);
     ctx.fillText(names[i], histogramColumnX, FIELD_HEIGHT + HISTOGRAM_TEXT_INTERVAL + CLOUD_TEXT_SIZE);
-
   }
 };
-
